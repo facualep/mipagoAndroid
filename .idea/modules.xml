@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/miPago.iml" filepath="$PROJECT_DIR$/miPago.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mipagoAndroid.iml" filepath="$PROJECT_DIR$/mipagoAndroid.iml" />
     </modules>
   </component>
 </project>
