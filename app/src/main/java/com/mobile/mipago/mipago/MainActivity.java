@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 
 public class MainActivity extends Activity {
@@ -14,7 +16,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WebView webview = (WebView) findViewById(R.id.webView);
-        webview.loadUrl("http://192.168.56.1:9999/");
+        webview.setWebViewClient(new WebViewClient());
+        webview.loadUrl("http://www.google.com");
 
     }
 
