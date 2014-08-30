@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -17,15 +18,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         WebView webview = (WebView) findViewById(R.id.webView);
         webview.setWebViewClient(new WebViewClient());
-        webview.loadUrl("http://www.google.com");
-
+        webview.setWebChromeClient(new WebChromeClient());
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webview.loadUrl("http://192.168.1.6:9999/test");
     }
-
-
-
-
-
-
-
-
 }
