@@ -9,6 +9,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.gdseed.mobilereader.MobileReader;
+
 
 public class MainActivity extends Activity {
 
@@ -21,6 +23,6 @@ public class MainActivity extends Activity {
         webview.setWebChromeClient(new WebChromeClient());
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webview.loadUrl("http://192.168.1.6:9999/test");
+        webview.loadUrl("http://enzoalberdi.zapto.org:9999/test");
     }
 }
