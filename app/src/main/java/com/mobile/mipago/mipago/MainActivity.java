@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         webSettings.setAppCacheEnabled(false);
         JavaScriptInterface javaScriptInterface = new JavaScriptInterface(this);
         webview.addJavascriptInterface(javaScriptInterface, "JSCardReader");
-        webview.loadUrl("http://enzoalberdi.zapto.org:9999/test");
+        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
 
 //        webview.loadUrl("http://192.168.1.6:9999/test");
     }
