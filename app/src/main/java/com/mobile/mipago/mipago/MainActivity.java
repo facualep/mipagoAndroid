@@ -17,21 +17,23 @@ import com.gdseed.mobilereader.MobileReader;
 
 
 public class MainActivity extends Activity {
-    MobileReader reader;
-    Button start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        CardReaderTask readerTask = new CardReaderTask(this);
-        readerTask.execute();
         WebView webview = (WebView) findViewById(R.id.webView);
+        webview.clearCache(true);
         webview.setWebViewClient(new WebViewClient());
         webview.setWebChromeClient(new WebChromeClient());
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAppCacheEnabled(false);
+        JavaScriptInterface javaScriptInterface = new JavaScriptInterface(this);
+        webview.addJavascriptInterface(javaScriptInterface, "JSCardReader");
         webview.loadUrl("http://enzoalberdi.zapto.org:9999/test");
+
+//        webview.loadUrl("http://192.168.1.6:9999/test");
     }
 
     @Override
