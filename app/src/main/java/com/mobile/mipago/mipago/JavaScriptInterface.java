@@ -15,7 +15,7 @@ public class JavaScriptInterface {
 
     @JavascriptInterface
     public void startReading(){
-        CardReaderTask readerTask = new CardReaderTask(context);
+        CardReaderTask readerTask = CardReaderTask.getInstance(context);
         readerTask.execute();
     }
 

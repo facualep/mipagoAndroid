@@ -12,9 +12,17 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     private MobileReader reader;
     public static final byte rawData[] = new byte[1024];
     final int trackCount[] = new int[1];
+    private static CardReaderTask cardReaderTaskInstance;
 
-    public CardReaderTask(Context context){
+    private CardReaderTask(Context context){
         this.ctx = context;
+    }
+
+    public static CardReaderTask getInstance(Context ctx) {
+        if (cardReaderTaskInstance == null) {
+            cardReaderTaskInstance = new CardReaderTask(ctx);
+        }
+        return cardReaderTaskInstance;
     }
 
     @Override
