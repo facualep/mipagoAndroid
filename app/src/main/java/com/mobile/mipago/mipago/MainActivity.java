@@ -13,21 +13,22 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements CardReaderTask.CardReaderHandler{
 
     public static ProgressDialog dialog;
     private boolean lastPage = false;
+    JavaScriptInterface jsInterface;
     WebView webview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         dialog = new ProgressDialog(this);
         dialog.setMessage("Cargando...");
         dialog.setCanceledOnTouchOutside(false);
         setContentView(R.layout.activity_main);
         webview = (WebView) findViewById(R.id.webView);
+        jsInterface = new JavaScriptInterface(this, webview);
         webview.clearCache(true);
         webview.setWebViewClient(new WebViewClient());
         webview.setWebChromeClient(new WebChromeClient());
@@ -53,9 +54,9 @@ public class MainActivity extends Activity {
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(false);
-        JavaScriptInterface javaScriptInterface = new JavaScriptInterface(this);
-        webview.addJavascriptInterface(javaScriptInterface, "JSCardReader");
+        webview.addJavascriptInterface(jsInterface, "JSCardReader");
         webview.loadUrl("http://enzoalberdi.zapto.org:9999");
+//        webview.loadUrl("http://192.168.1.6:9999");
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
             @Override
@@ -95,5 +96,15 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void devicePlugin() {
+        jsInterface.devicePlugin();
+    }
+
+    @Override
+    public void devicePlugout() {
+        jsInterface.devicePlugOut();
     }
 }

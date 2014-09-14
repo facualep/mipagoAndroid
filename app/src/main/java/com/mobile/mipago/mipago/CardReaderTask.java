@@ -1,5 +1,6 @@
 package com.mobile.mipago.mipago;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -13,9 +14,24 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     public static final byte rawData[] = new byte[1024];
     final int trackCount[] = new int[1];
     private static CardReaderTask cardReaderTaskInstance;
+    CardReaderHandler callBackActions;
+
+    // Cardreader interface to implements in parent
+    public interface CardReaderHandler {
+
+        public void devicePlugin();
+
+        public void devicePlugout();
+    }
 
     private CardReaderTask(Context context){
         this.ctx = context;
+        try {
+            callBackActions = (CardReaderHandler) ctx;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(ctx.toString()
+                    + " must implement CardReaderHandler");
+        }
     }
 
     public static CardReaderTask getInstance(Context ctx) {
@@ -42,10 +58,12 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
                         break;
                     case DEVICE_PLUGIN:
                         reader.open(false);
+                        callBackActions.devicePlugin();
                         publishProgress("Bien ahi, hijo de puta consumista.");
                         break;
                     case DEVICE_PLUGOUT:
                         publishProgress("Para que compraste esta mierda si no la queres usar");
+                        callBackActions.devicePlugout();
                         reader.close();
                         break;
                     case DECODE_OK:
