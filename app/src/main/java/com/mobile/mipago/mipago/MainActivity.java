@@ -12,6 +12,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.util.HashMap;
+
 
 public class MainActivity extends Activity implements CardReaderTask.CardReaderHandler{
 
@@ -55,8 +57,8 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(false);
         webview.addJavascriptInterface(jsInterface, "JSCardReader");
-        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
-//        webview.loadUrl("http://192.168.1.6:9999");
+//        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
+        webview.loadUrl("http://192.168.1.6:9999");
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
             @Override
@@ -106,5 +108,25 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
     @Override
     public void devicePlugout() {
         jsInterface.devicePlugOut();
+    }
+
+    @Override
+    public void beginReceive() {
+        jsInterface.beginRecive();
+    }
+
+    @Override
+    public void timeOut() {
+        jsInterface.timerOut();
+    }
+
+    @Override
+    public void decode(HashMap message) {
+        jsInterface.decodeOk(message);
+    }
+
+    @Override
+    public void endReceive() {
+        jsInterface.endRecive();
     }
 }
