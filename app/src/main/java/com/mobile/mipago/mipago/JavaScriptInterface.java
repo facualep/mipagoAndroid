@@ -38,9 +38,7 @@ public class JavaScriptInterface {
     @JavascriptInterface
     public void startReading(){
         readerTask = CardReaderTask.getInstance(context);
-        if (!readerTask.isCancelled()) {
-            readerTask.execute();
-        }
+        readerTask.execute();
     }
 
     @JavascriptInterface
