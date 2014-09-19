@@ -29,12 +29,18 @@ public class JavaScriptInterface {
         this.webView = view;
     }
 
+    public CardReaderTask getReaderTask() {
+        return readerTask;
+    }
+
     // ************************* FROM WEBPAGE PART **************************\\
 
     @JavascriptInterface
     public void startReading(){
         readerTask = CardReaderTask.getInstance(context);
-        readerTask.execute();
+        if (!readerTask.isCancelled()) {
+            readerTask.execute();
+        }
     }
 
     @JavascriptInterface
