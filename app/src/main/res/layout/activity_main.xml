@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"></LinearLayout>
     <WebView
         android:layout_width="match_parent"
+        android:windowSoftInputMode="adjustPan"
         android:layout_height="match_parent"
+        android:focusable="true"
         android:id="@+id/webView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
