@@ -79,6 +79,8 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     // *********************** ASYNCTASK *******************************\\
     @Override
     protected Void doInBackground(Void... voids) {
+        reader = new MobileReader(this.ctx);
+        trackCount[0] = 0;
         reader.setOnDataListener(new MobileReader.CallInterface() {
             @Override
             public void call(MobileReader.ReaderStatus readerStatus) {
@@ -140,13 +142,6 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
         });
 
         return null;
-    }
-
-    @Override
-    protected void onPreExecute(){
-        reader = new MobileReader(this.ctx);
-        reader.setDebugOn("debug0", true);
-        trackCount[0] = 0;
     }
 
     @Override
