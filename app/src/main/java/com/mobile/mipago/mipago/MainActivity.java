@@ -76,6 +76,14 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
     }
 
     @Override
+    protected void onStop(){
+        super.onStop();
+        CardReaderTask cardTask = CardReaderTask.getInstance(this);
+        cardTask.closeReader();
+        cardTask.cancel(true);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(event.getAction() == KeyEvent.ACTION_DOWN){
             switch(keyCode)
@@ -127,6 +135,6 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
 
     @Override
     public void endReceive() {
-        jsInterface.endRecive();
+        jsInterface.getReaderTask().cancel(true);
     }
 }
