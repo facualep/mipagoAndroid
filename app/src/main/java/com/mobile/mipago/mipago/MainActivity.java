@@ -39,7 +39,6 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
             public void onProgressChanged(WebView view, int progress)
             {
                 dialog.setProgress(progress * 100);
-
                 if(progress == 100)
                     dialog.hide();
             }
@@ -58,7 +57,7 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
         webSettings.setAppCacheEnabled(false);
         webview.addJavascriptInterface(jsInterface, "JSCardReader");
 //        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
-        webview.loadUrl("http://192.168.1.6:9999/sales");
+        webview.loadUrl("http://192.168.0.117:9999/sales");
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
             @Override
@@ -74,14 +73,6 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
             }
         });
     }
-//
-//    @Override
-//    protected void onStop(){
-//        super.onStop();
-//        CardReaderTask cardTask = CardReaderTask.getInstance(this);
-//        cardTask.closeReader();
-//        cardTask.cancel(true);
-//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -93,14 +84,21 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
                         webview.goBack();
                     }else{
                         lastPage = true;
-                        finish();
                         dialog.dismiss();
+                        jsInterface.stopReading();
+                        finish();
                     }
                     return true;
             }
 
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        jsInterface.stopReading();
     }
 
     @Override

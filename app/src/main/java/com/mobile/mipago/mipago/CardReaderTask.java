@@ -55,6 +55,7 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
         public void decode(HashMap message);
 
         public void endReceive();
+
     }
 
     // *********************** CONSTRUCTORS *******************************\\
@@ -150,6 +151,11 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     }
 
     public void closeReader() {
-        reader.close();
+        try {
+            this.finalize();
+            reader.close();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 }

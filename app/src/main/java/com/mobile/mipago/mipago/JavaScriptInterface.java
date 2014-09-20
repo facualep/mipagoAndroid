@@ -43,7 +43,10 @@ public class JavaScriptInterface {
 
     @JavascriptInterface
     public void stopReading() {
-        readerTask.closeReader();
+        if (readerTask!=null && !readerTask.isCancelled()) {
+            readerTask.closeReader();
+            readerTask.cancel(true);
+        }
     }
 
     // ************************* TO WEBPAGE PART **************************\\
