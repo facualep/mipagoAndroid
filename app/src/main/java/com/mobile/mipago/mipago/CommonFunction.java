@@ -10,6 +10,9 @@ import android.os.Build;
 import android.text.format.Time;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CommonFunction {
 
     private static int fileCount = 0;
@@ -31,7 +34,7 @@ public class CommonFunction {
         String userName = new String();
         String ksn = new String();
         String encrypedData = new String();
-        String ret = new String();
+        JSONObject ret = new JSONObject();
         String xxx = new String();
         String trackInfo = new String();
         byte byEncrypedData[];
@@ -159,15 +162,27 @@ public class CommonFunction {
             track[0] = trackCount;
         }
 
-        ret = ("Firmware Version:" + version + "\n" + "Encryption Mode:"
-                + encryptMode + "\n" + "Track Info:" + trackInfo + "\n"
-                + "PAN:" + first6Pan + xxx + last4Pan + "\n" + "Expiry Date:"
-                + expiryDate + "\n" + "User Name:" + userName + "\n" + "KSN:"
-                + ksn + "\n" + "Encrypted Data:" + "\n" + encrypedData + "\n");
-
-
+        try {
+            ret.put("FirmwareVersion", version);
+            ret.put("EncryptionMode", encryptMode);
+            ret.put("Pan", first6Pan + xxx + last4Pan);
+            ret.put("ExpiryDate", expiryDate);
+            ret.put("UserName", userName);
+            ret.put("Ksn", ksn);
+            ret.put("EncryptedData", encrypedData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//
+//        ret = ("{" +
+//                "FirmwareVersion:" + version + "," + "EncryptionMode:"
+//                + encryptMode + "," + "TrackInfo:" + trackInfo + ","
+//                + "Pan:" + first6Pan + xxx + last4Pan + "," + "ExpiryDate:"
+//                + expiryDate + "," + "UserName:" + userName + "," + "Ksn:"
+//                + ksn + "," + "EncryptedData:" + "," + encrypedData+"" +
+//                "}");
         if (true) {
-            return ret;
+            return ret.toString();
         }
 
         byte[] tmp_key = {0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef, (byte)0xfe, (byte)0xdc, (byte)0xba, (byte)0x98, 0x76, 0x54, 0x32, 0x10};
@@ -210,10 +225,14 @@ public class CommonFunction {
         }
 
 
-        ret += decrypedData;
-        ret += "\nPan:" + realPan;
-        return ret;
-
+        try {
+            ret.put("DecrypedData", decrypedData);
+            ret.put("Pan", realPan);
+            return ret.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     static String getCurrentFileName() {
