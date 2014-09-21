@@ -56,8 +56,8 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(false);
         webview.addJavascriptInterface(jsInterface, "JSCardReader");
-        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
-//        webview.loadUrl("http://192.168.1.6:9999");
+//        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
+        webview.loadUrl("http://192.168.0.117:9999");
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
             @Override
