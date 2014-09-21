@@ -59,7 +59,7 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     }
 
     // *********************** CONSTRUCTORS *******************************\\
-    private CardReaderTask(Context context){
+    public CardReaderTask(Context context){
         this.ctx = context;
         message = new HashMap<String, String>();
         try {
@@ -70,12 +70,12 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
         }
     }
 
-    public static CardReaderTask getInstance(Context ctx) {
-        if (cardReaderTaskInstance == null) {
-            cardReaderTaskInstance = new CardReaderTask(ctx);
-        }
-        return cardReaderTaskInstance;
-    }
+//    public static CardReaderTask getInstance(Context ctx) {
+//        if (cardReaderTaskInstance == null) {
+//            cardReaderTaskInstance = new CardReaderTask(ctx);
+//        }
+//        return cardReaderTaskInstance;
+//    }
 
     // *********************** ASYNCTASK *******************************\\
     @Override
@@ -101,9 +101,13 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
                         callBackActions.endReceive();
                         break;
                     case DEVICE_PLUGIN:
-                        reader.open(false);
-                        callBackActions.devicePlugin();
-                        publishProgress(CardReaderMessages.DEVICE_PLUGIN_MESSAGE);
+
+                        if (reader.open(false)){
+                            callBackActions.devicePlugin();
+                            publishProgress(CardReaderMessages.DEVICE_PLUGIN_MESSAGE);
+                        }else {
+                            reader.close();
+                        }
                         break;
                     case DEVICE_PLUGOUT:
                         reader.close();
