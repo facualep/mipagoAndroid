@@ -1,6 +1,7 @@
 package com.mobile.mipago.mipago;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -22,7 +23,7 @@ public class CommonFunction {
     private final static String modelMS62x = "MS62x";
     private final static String modelMS22x = "MS22x";
 
-    static String passPackageToString(byte input[], int track[], String curModel) {
+    static HashMap<String, String> passPackageToString(byte input[], int track[], String curModel) {
 
         int panLength = 0;
         int index = 0;
@@ -34,7 +35,7 @@ public class CommonFunction {
         String userName = new String();
         String ksn = new String();
         String encrypedData = new String();
-        JSONObject ret = new JSONObject();
+        HashMap<String, String> ret = new HashMap<String, String>();
         String xxx = new String();
         String trackInfo = new String();
         byte byEncrypedData[];
@@ -162,27 +163,16 @@ public class CommonFunction {
             track[0] = trackCount;
         }
 
-        try {
-            ret.put("FirmwareVersion", version);
-            ret.put("EncryptionMode", encryptMode);
-            ret.put("Pan", first6Pan + xxx + last4Pan);
-            ret.put("ExpiryDate", expiryDate);
-            ret.put("UserName", userName);
-            ret.put("Ksn", ksn);
-            ret.put("EncryptedData", encrypedData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-//
-//        ret = ("{" +
-//                "FirmwareVersion:" + version + "," + "EncryptionMode:"
-//                + encryptMode + "," + "TrackInfo:" + trackInfo + ","
-//                + "Pan:" + first6Pan + xxx + last4Pan + "," + "ExpiryDate:"
-//                + expiryDate + "," + "UserName:" + userName + "," + "Ksn:"
-//                + ksn + "," + "EncryptedData:" + "," + encrypedData+"" +
-//                "}");
+        ret.put("firmware_version", version);
+        ret.put("encryption_mode", encryptMode);
+        ret.put("pan", first6Pan + xxx + last4Pan);
+        ret.put("expiry_date", expiryDate);
+        ret.put("user_name", userName);
+        ret.put("ksn", ksn);
+        ret.put("encrypted_data", encrypedData);
+
         if (true) {
-            return ret.toString();
+            return ret;
         }
 
         byte[] tmp_key = {0x01, 0x23, 0x45, 0x67, (byte)0x89, (byte)0xab, (byte)0xcd, (byte)0xef, (byte)0xfe, (byte)0xdc, (byte)0xba, (byte)0x98, 0x76, 0x54, 0x32, 0x10};
@@ -225,14 +215,9 @@ public class CommonFunction {
         }
 
 
-        try {
-            ret.put("DecrypedData", decrypedData);
-            ret.put("Pan", realPan);
-            return ret.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        ret.put("DecrypedData", decrypedData);
+        ret.put("Pan", realPan);
+        return ret;
     }
 
     static String getCurrentFileName() {

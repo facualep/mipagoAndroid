@@ -7,13 +7,14 @@ import android.util.Log;
 import com.gdseed.mobilereader.MobileReader;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CardReaderTask extends AsyncTask<Void, String, Void>{
 
     // *********************** CLASS VARIABLES *******************************\\
     private Context ctx;
     private MobileReader reader;
-    HashMap<String, String> message;
+    HashMap<String, Object> message;
     public static final byte rawData[] = new byte[1024];
     final int trackCount[] = new int[1];
     private static CardReaderTask cardReaderTaskInstance;
@@ -61,7 +62,7 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     // *********************** CONSTRUCTORS *******************************\\
     public CardReaderTask(Context context){
         this.ctx = context;
-        message = new HashMap<String, String>();
+        message = new HashMap<String, Object>();
         try {
             callBackActions = (CardReaderHandler) ctx;
         } catch (ClassCastException e) {
@@ -122,8 +123,8 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
                             message.put(CardReaderMessages.MESSAGE_FIELD, CardReaderMessages.DECODE_OK_MESSAGE_UPDATE);
 
                         } else if (0x60 == rawData[0]) {
-                            String cardData = CommonFunction.passPackageToString(rawData, trackCount, "MS62x");
-                            publishProgress(cardData);
+                            HashMap<String, String> cardData = CommonFunction.passPackageToString(rawData, trackCount, "MS62x");
+                            publishProgress(cardData.toString());
                             message.put(CardReaderMessages.STATUS_FIELD, CardReaderMessages.STATUS_SUCCESS);
                             message.put(CardReaderMessages.MESSAGE_FIELD, cardData);
                         } else if (0x77 == rawData[0]) {

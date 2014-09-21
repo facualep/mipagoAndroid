@@ -82,14 +82,9 @@ public class JavaScriptInterface {
 
     @JavascriptInterface
     public void decodeOk(HashMap message){
-        JSONObject jsonMessage = null;
-        try {
-            jsonMessage = tools.hashMapToJson(message);
-            javascriptInstruction = "cardReader.eventDecodeFinish('"+jsonMessage.toString()+"')";
-            this.executeJavascriptFunctionThreat();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        HashMap<String, String> data = (HashMap<String, String>)message.get("message");
+        javascriptInstruction = "cardReader.eventDecodeFinish('"+data.get("user_name")+"----"+data.get("pan")+"')";
+        this.executeJavascriptFunctionThreat();
     }
 
     private void executeJavascriptFunctionThreat() {
