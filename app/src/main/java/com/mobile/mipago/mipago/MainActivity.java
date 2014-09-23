@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
         webSettings.setAppCacheEnabled(false);
         webview.addJavascriptInterface(jsInterface, "JSCardReader");
 //        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
-        webview.loadUrl("http://192.168.1.6:9999/sales");
+        webview.loadUrl("http://192.168.1.193:9999");
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
             @Override
@@ -86,11 +86,15 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
                     jsInterface.stopReading();
                     webview.clearCache(true );
                     if(webview.canGoBack()){
-                        jsInterface.getReaderTask().closeReader();
+                        if (jsInterface.getReaderTask() != null) {
+                            jsInterface.getReaderTask().closeReader();
+                        }
                         webview.goBack();
                     }else{
                         lastPage = true;
-                        jsInterface.getReaderTask().closeReader();
+                        if (jsInterface.getReaderTask() != null) {
+                            jsInterface.getReaderTask().closeReader();
+                        }
                         dialog.dismiss();
                         finish();
                     }
