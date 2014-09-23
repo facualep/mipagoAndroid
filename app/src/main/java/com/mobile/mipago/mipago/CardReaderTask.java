@@ -56,11 +56,10 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
         public void decode(HashMap message);
 
         public void endReceive();
-
     }
 
     // *********************** CONSTRUCTORS *******************************\\
-    public CardReaderTask(Context context){
+    private CardReaderTask(Context context){
         this.ctx = context;
         message = new HashMap<String, Object>();
         try {
@@ -71,17 +70,19 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
         }
     }
 
-//    public static CardReaderTask getInstance(Context ctx) {
-//        if (cardReaderTaskInstance == null) {
-//            cardReaderTaskInstance = new CardReaderTask(ctx);
-//        }
-//        return cardReaderTaskInstance;
-//    }
+    public static CardReaderTask getInstance(Context ctx) {
+        if (cardReaderTaskInstance == null) {
+            cardReaderTaskInstance = new CardReaderTask(ctx);
+        }
+        return cardReaderTaskInstance;
+    }
 
     // *********************** ASYNCTASK *******************************\\
     @Override
     protected Void doInBackground(Void... voids) {
         reader = new MobileReader(this.ctx);
+        reader.setTimerout(999999999);
+        reader.setDebugOn("debug0", true);
         trackCount[0] = 0;
         reader.setOnDataListener(new MobileReader.CallInterface() {
             @Override
@@ -105,7 +106,6 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
                         reader.open(false);
                         callBackActions.devicePlugin();
                         publishProgress(CardReaderMessages.DEVICE_PLUGIN_MESSAGE);
-
                         break;
                     case DEVICE_PLUGOUT:
                         reader.close();
@@ -153,11 +153,7 @@ public class CardReaderTask extends AsyncTask<Void, String, Void>{
     }
 
     public void closeReader() {
-        try {
-            this.finalize();
-            reader.close();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        reader.setOnDataListener(null);
+        reader.close();
     }
 }

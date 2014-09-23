@@ -1,9 +1,11 @@
 package com.mobile.mipago.mipago;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import com.gdseed.mobilereader.MobileReader;
 import com.mobile.mipago.mipago.utils.tools;
 
 import org.json.JSONException;
@@ -37,13 +39,13 @@ public class JavaScriptInterface {
 
     @JavascriptInterface
     public void startReading(){
-        readerTask = new CardReaderTask(context);
-        readerTask.execute();
+        readerTask = CardReaderTask.getInstance(context);
+        if (readerTask.getStatus() != AsyncTask.Status.RUNNING) readerTask.execute();
     }
 
     @JavascriptInterface
     public void stopReading() {
-        if (readerTask!=null && !readerTask.isCancelled()) {
+        if (readerTask!=null) {
             readerTask.closeReader();
             readerTask.cancel(true);
         }
@@ -82,9 +84,18 @@ public class JavaScriptInterface {
 
     @JavascriptInterface
     public void decodeOk(HashMap message){
-        HashMap<String, String> data = (HashMap<String, String>)message.get("message");
-        javascriptInstruction = "cardReader.eventDecodeFinish('"+data.get("user_name")+"----"+data.get("pan")+"')";
+        try {
+            HashMap<String, String> data = (HashMap<String, String>)message.get("message");
+            javascriptInstruction = "cardReader.eventDecodeFinish('"+data.get("user_name")+"----"+data.get("pan")+"')";
+        } catch (Exception e) {
+            javascriptInstruction = "cardReader.eventDecodeFinish('"+message.get("message")+"')";
+        }
+
         this.executeJavascriptFunctionThreat();
+    }
+
+    public void setReaderTask(CardReaderTask readerTask) {
+        this.readerTask = readerTask;
     }
 
     private void executeJavascriptFunctionThreat() {

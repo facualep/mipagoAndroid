@@ -12,6 +12,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.gdseed.mobilereader.MobileReader;
+
 import java.util.HashMap;
 
 
@@ -57,24 +59,23 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
         webSettings.setAppCacheEnabled(false);
         webview.addJavascriptInterface(jsInterface, "JSCardReader");
 //        webview.loadUrl("http://enzoalberdi.zapto.org:9999");
-        webview.loadUrl("http://192.168.0.117:9999/test");
+        webview.loadUrl("http://192.168.1.6:9999/sales");
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
             @Override
             public boolean onKey(DialogInterface arg0, int keyCode,
                                  KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (!webview.canGoBack() && lastPage) {
-                        finish();
-                        dialog.dismiss();
-                    }
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (!webview.canGoBack() && lastPage) {
+                    jsInterface.getReaderTask().closeReader();
+                    finish();
+                    dialog.dismiss();
                 }
-                return true;
+            }
+            return true;
             }
         });
     }
-
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -85,10 +86,11 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
                     jsInterface.stopReading();
                     webview.clearCache(true );
                     if(webview.canGoBack()){
-
+                        jsInterface.getReaderTask().closeReader();
                         webview.goBack();
                     }else{
                         lastPage = true;
+                        jsInterface.getReaderTask().closeReader();
                         dialog.dismiss();
                         finish();
                     }
@@ -100,15 +102,17 @@ public class MainActivity extends Activity implements CardReaderTask.CardReaderH
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void onDestroy() {
         jsInterface.stopReading();
+        super.onDestroy();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+//    @Override
+//    public void onPause() {
+//        jsInterface.stopReading();
+//        super.onPause();
+//    }
+
 
     @Override
     public void devicePlugin() {
